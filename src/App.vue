@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue"
 import WeightSelector from "./components/WeightSelector.vue"
+import TextInput from "./components/TextInput.vue"
 import RangeInput from "./components/RangeInput.vue"
 import { WeightTypes } from "./types"
 import type { Todo } from "./types"
@@ -44,9 +45,15 @@ const overallProgress = computed(() => {
 
 <template>
   <h1>My Todo List</h1>
-  <div>
-    <input type="text" v-model="input">
-    <button @click="addList">追加</button>
+  <div class="item">
+    <div class="text">
+      <TextInput type="text" v-model="input" />
+    </div>
+    <div class="progress-bar">@</div>
+    <div class="progress">@</div>
+    <div class="weight">@</div>
+    <div class="proration">@</div>
+    <div class="delete"><button @click="addList">追加</button></div>
   </div>
   <hr>
   <div class="item">
@@ -91,7 +98,7 @@ const overallProgress = computed(() => {
   display: flex;
   flex-direction: row;
   column-gap: 10px;
-  width: 600px;
+  width: 800px;
   margin-bottom: 5px;
 
   .text {
