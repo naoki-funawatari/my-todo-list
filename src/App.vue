@@ -44,9 +44,9 @@ const deleteItem = (id: number) => {
   <hr>
   <div class="item">
     <div class="text">内容</div>
-    <div class="progress-bar"></div>
-    <div class="progress"></div>
-    <div class="delete"></div>
+    <div class="progress-bar">@</div>
+    <div class="progress">@</div>
+    <div class="delete">@</div>
   </div>
   <div v-for="item in list" class="item">
     <div class="text">{{item.text}}</div>
@@ -65,7 +65,7 @@ const deleteItem = (id: number) => {
       <progress max="100" :value="overallProgress"></progress>
     </div>
     <div class="progress">{{overallProgress}} %</div>
-    <div class="delete"></div>
+    <div class="delete">@</div>
   </div>
 </template>
 
@@ -73,17 +73,17 @@ const deleteItem = (id: number) => {
 .item {
   display: flex;
   flex-direction: row;
-  width: 500px;
+  column-gap: 10px;
+  width: 600px;
   margin-bottom: 5px;
 
   .text {
     flex-grow: 1;
-    margin-right: 10px;
     border-bottom: 1px solid black
   }
 
   .progress-bar {
-    flex-shrink: 1;
+    width: 160px;
     text-align: right;
     border-bottom: 1px solid black
   }
