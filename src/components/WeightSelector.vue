@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { PropType, ref } from "vue"
+import type { Weight, WeightType } from "../types"
 
 defineProps({
   modelValue: {
-    type: Number,
+    type: Number as PropType<WeightType>,
     required: false,
-    default: 1
+    default: 1,
   }
 })
 
@@ -13,7 +14,7 @@ const emits = defineEmits<{
   (event: 'update:modelValue', value: Number): void
 }>()
 
-const list = ref([
+const list = ref<Weight[]>([
   { value: 1, text: "小" },
   { value: 3, text: "中" },
   { value: 5, text: "大" },

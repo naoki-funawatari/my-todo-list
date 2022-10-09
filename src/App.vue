@@ -1,41 +1,43 @@
 <script setup lang="ts">
 import { ref, computed } from "vue"
 import WeightSelector from "./components/WeightSelector.vue"
-
-interface todo {
-  id: number;
-  text: string;
-  progress: number;
-  weight: number | undefined
-}
+import type { Todo } from "./types"
 
 const input = ref<string>("")
-const list = ref<todo[]>([
-  { id: 3, text: "テスト 4", progress: 10, weight: undefined },
+const list = ref<Todo[]>([
+  { id: 3, text: "テスト 4", progress: 10, weight: 1 },
   { id: 3, text: "テスト 3", progress: 0, weight: 5 },
   { id: 2, text: "テスト 2", progress: 45, weight: 3 },
   { id: 1, text: "テスト 1", progress: 60, weight: 1 },
 ])
-
-const overallProgress = computed(() => {
-  const count = list.value.length
-  const total = list.value.reduce((a, b) => a + Number(b.progress), 0)
-  const progress = Math.trunc(total / count)
-  return progress
-})
 
 const addList = () => {
   if (input.value === "") {
     return
   }
   const id = Math.max(...list.value.map(o => o.id)) + 1
-  const item = { id, text: input.value, progress: 0, weight: undefined }
+  const item: Todo = { id, text: input.value, progress: 0, weight: 1 }
   list.value = [item, ...list.value]
   input.value = ""
 }
 const deleteItem = (id: number) => {
   list.value = list.value.filter(o => o.id !== id)
 }
+const proration = (progress: number, weight: number, trunc: boolean = false) => {
+  const totalWeight = list.value.reduce((a, b) => a + Number(b.weight), 0)
+  const ratio = weight / totalWeight
+  return trunc ? Math.trunc(progress * ratio) : progress * ratio
+}
+
+const overallProgress = computed(() => {
+  // const count = list.value.length
+  // const total = list.value.reduce((a, b) => a + Number(b.progress), 0)
+  // const progress = Math.trunc(total / count)
+  // return progress
+  const values = list.value.map(o => proration(o.progress, o.weight))
+  const total = values.reduce((a, b) => a + b, 0)
+  return Math.trunc(total)
+})
 </script>
 
 <template>
@@ -64,8 +66,10 @@ const deleteItem = (id: number) => {
     <div class="weight">
       <WeightSelector v-model="item.weight" />
     </div>
-    <div class="proration">@</div>
-    <div class="delete" @click="deleteItem(item.id)"><button>削除</button></div>
+    <div class="proration">{{proration(item.progress, item.weight, true)}} %</div>
+    <div class="delete" @click="deleteItem(item.id)">
+      <button>削除</button>
+    </div>
   </div>
   <hr>
   <div class="item">
@@ -73,9 +77,9 @@ const deleteItem = (id: number) => {
     <div class="progress-bar">
       <progress max="100" :value="overallProgress"></progress>
     </div>
-    <div class="progress">{{overallProgress}} %</div>
+    <div class="progress">@</div>
     <div class="weight">@</div>
-    <div class="proration">@</div>
+    <div class="proration">{{overallProgress}} %</div>
     <div class="delete">@</div>
   </div>
 </template>
