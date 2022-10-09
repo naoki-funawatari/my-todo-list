@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import { ref, computed } from "vue"
+import WeightSelector from "./components/WeightSelector.vue"
 
 interface todo {
   id: number;
   text: string;
   progress: number;
+  weight: number | undefined
 }
 
 const input = ref<string>("")
 const list = ref<todo[]>([
-  { id: 1, text: "テスト 1", progress: 0 },
-  { id: 2, text: "テスト 2", progress: 0 },
-  { id: 3, text: "テスト 3", progress: 0 }
+  { id: 3, text: "テスト 4", progress: 10, weight: undefined },
+  { id: 3, text: "テスト 3", progress: 0, weight: 5 },
+  { id: 2, text: "テスト 2", progress: 45, weight: 3 },
+  { id: 1, text: "テスト 1", progress: 60, weight: 1 },
 ])
 
 const overallProgress = computed(() => {
@@ -26,7 +29,7 @@ const addList = () => {
     return
   }
   const id = Math.max(...list.value.map(o => o.id)) + 1
-  const item = { id, text: input.value, progress: 0 }
+  const item = { id, text: input.value, progress: 0, weight: undefined }
   list.value = [item, ...list.value]
   input.value = ""
 }
@@ -46,6 +49,8 @@ const deleteItem = (id: number) => {
     <div class="text">内容</div>
     <div class="progress-bar">@</div>
     <div class="progress">@</div>
+    <div class="weight">@</div>
+    <div class="proration">@</div>
     <div class="delete">@</div>
   </div>
   <div v-for="item in list" class="item">
@@ -56,6 +61,10 @@ const deleteItem = (id: number) => {
     <div class="progress">
       <span>{{item.progress}} %</span>
     </div>
+    <div class="weight">
+      <WeightSelector v-model="item.weight" />
+    </div>
+    <div class="proration">@</div>
     <div class="delete" @click="deleteItem(item.id)"><button>削除</button></div>
   </div>
   <hr>
@@ -65,6 +74,8 @@ const deleteItem = (id: number) => {
       <progress max="100" :value="overallProgress"></progress>
     </div>
     <div class="progress">{{overallProgress}} %</div>
+    <div class="weight">@</div>
+    <div class="proration">@</div>
     <div class="delete">@</div>
   </div>
 </template>
@@ -89,6 +100,24 @@ const deleteItem = (id: number) => {
   }
 
   .progress {
+    width: 60px;
+    text-align: right;
+    border-bottom: 1px solid black
+  }
+
+  .progress {
+    width: 60px;
+    text-align: right;
+    border-bottom: 1px solid black
+  }
+
+  .weight {
+    width: 60px;
+    text-align: right;
+    border-bottom: 1px solid black
+  }
+
+  .proration {
     width: 60px;
     text-align: right;
     border-bottom: 1px solid black
