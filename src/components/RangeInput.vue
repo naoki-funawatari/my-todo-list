@@ -3,7 +3,7 @@ defineProps({
   modelValue: {
     type: Number,
     required: false,
-    default: 1,
+    default: 0,
   }
 })
 

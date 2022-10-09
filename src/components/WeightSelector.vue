@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { PropType, ref } from "vue"
+import { WeightTypes } from "../types"
 import type { Weight, WeightType } from "../types"
 
 defineProps({
@@ -15,9 +16,9 @@ const emits = defineEmits<{
 }>()
 
 const list = ref<Weight[]>([
-  { value: 1, text: "小" },
-  { value: 3, text: "中" },
-  { value: 5, text: "大" },
+  { value: WeightTypes.Low, text: "小" },
+  { value: WeightTypes.Medium, text: "中" },
+  { value: WeightTypes.High, text: "大" },
 ])
 
 const onChange = (event: Event) => {

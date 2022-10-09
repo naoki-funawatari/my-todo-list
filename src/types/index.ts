@@ -10,10 +10,10 @@ export interface Weight {
   text: string
 }
 
-const WeightTypeA = {
+export const WeightTypes = {
   Low: 1,
-  Midium: 3,
-  High: 5
+  Medium: 3,
+  High: 5,
 } as const
 
-export type WeightType = typeof WeightTypeA[keyof typeof WeightTypeA]
+export type WeightType = typeof WeightTypes[keyof typeof WeightTypes]

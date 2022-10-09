@@ -2,14 +2,15 @@
 import { ref, computed } from "vue"
 import WeightSelector from "./components/WeightSelector.vue"
 import RangeInput from "./components/RangeInput.vue"
+import { WeightTypes } from "./types"
 import type { Todo } from "./types"
 
 const input = ref<string>("")
 const list = ref<Todo[]>([
-  { id: 3, text: "テスト 4", progress: 10, weight: 1 },
-  { id: 3, text: "テスト 3", progress: 0, weight: 5 },
-  { id: 2, text: "テスト 2", progress: 45, weight: 3 },
-  { id: 1, text: "テスト 1", progress: 60, weight: 1 },
+  { id: 3, text: "テスト 4", progress: 10, weight: WeightTypes.Low },
+  { id: 3, text: "テスト 3", progress: 0, weight: WeightTypes.High },
+  { id: 2, text: "テスト 2", progress: 45, weight: WeightTypes.Medium },
+  { id: 1, text: "テスト 1", progress: 60, weight: WeightTypes.Low },
 ])
 
 const addList = () => {
@@ -17,7 +18,7 @@ const addList = () => {
     return
   }
   const id = Math.max(...list.value.map(o => o.id)) + 1
-  const item: Todo = { id, text: input.value, progress: 0, weight: 1 }
+  const item: Todo = { id, text: input.value, progress: 0, weight: WeightTypes.Low }
   list.value = [item, ...list.value]
   input.value = ""
 }
