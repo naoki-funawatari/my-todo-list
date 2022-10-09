@@ -1,16 +1,19 @@
-export type Todo = {
-  id: number;
-  text: string;
-  progress: number;
-  weight: WeightType;
-};
+export interface Todo {
+  id: number
+  text: string
+  progress: number
+  weight: WeightType
+}
 
-export type Weight = { value: number; text: string };
+export interface Weight {
+  value: number
+  text: string
+}
 
-const WeightType = {
+const WeightTypeA = {
   Low: 1,
   Midium: 3,
-  High: 5,
-} as const;
+  High: 5
+} as const
 
-export type WeightType = typeof WeightType[keyof typeof WeightType];
+export type WeightType = typeof WeightTypeA[keyof typeof WeightTypeA]
