@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue"
 import WeightSelector from "./components/WeightSelector.vue"
+import RangeInput from "./components/RangeInput.vue"
 import type { Todo } from "./types"
 
 const input = ref<string>("")
@@ -58,7 +59,7 @@ const overallProgress = computed(() => {
   <div v-for="item in list" class="item">
     <div class="text">{{item.text}}</div>
     <div class="progress-bar">
-      <input type="range" min="0" max="100" step="5" v-model="item.progress" />
+      <RangeInput v-model="item.progress" />
     </div>
     <div class="progress">
       <span>{{item.progress}} %</span>
