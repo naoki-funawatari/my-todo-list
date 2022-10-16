@@ -3,6 +3,7 @@ export interface Todo {
   text: string
   progress: number
   weight: WeightType
+  order: number
 }
 
 export interface Weight {

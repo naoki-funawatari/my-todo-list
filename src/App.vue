@@ -8,10 +8,12 @@ import type { Todo } from "./types"
 
 const input = ref<string>("")
 const list = ref<Todo[]>([
-  { id: 3, text: "テスト 4", progress: 10, weight: WeightTypes.Low },
-  { id: 3, text: "テスト 3", progress: 0, weight: WeightTypes.High },
-  { id: 2, text: "テスト 2", progress: 45, weight: WeightTypes.Medium },
-  { id: 1, text: "テスト 1", progress: 60, weight: WeightTypes.Low },
+  { id: 1, text: "テスト 1", progress: 60, weight: WeightTypes.Low, order: 1 },
+  { id: 2, text: "テスト 2", progress: 45, weight: WeightTypes.Medium, order: 2 },
+  { id: 3, text: "テスト 3", progress: 0, weight: WeightTypes.High, order: 3 },
+  { id: 4, text: "テスト 4", progress: 90, weight: WeightTypes.Low, order: 4 },
+  { id: 5, text: "テスト 5", progress: 35, weight: WeightTypes.High, order: 5 },
+  { id: 6, text: "テスト 6", progress: 60, weight: WeightTypes.Medium, order: 6 },
 ])
 
 const addList = () => {
@@ -19,12 +21,21 @@ const addList = () => {
     return
   }
   const id = Math.max(...list.value.map(o => o.id)) + 1
-  const item: Todo = { id, text: input.value, progress: 0, weight: WeightTypes.Low }
+  const order = Math.max(...list.value.map(o => o.order)) + 1
+  const item: Todo = { id, text: input.value, progress: 0, weight: WeightTypes.Low, order }
   list.value = [item, ...list.value]
   input.value = ""
 }
 const deleteItem = (id: number) => {
   list.value = list.value.filter(o => o.id !== id)
+}
+const changeOrder = (type: "up" | "down", currentOrder: number) => {
+  let ordered = [...list.value]
+  const index = ordered.findIndex(o => o.order === currentOrder)
+  ordered[index].order += (type === "up" ? -1.5 : 1.5)
+  ordered.sort((a, b) => a.order - b.order)
+  ordered.forEach((o, i) => o.order = i + 1)
+  list.value = ordered
 }
 const proration = (progress: number, weight: number, trunc: boolean = false) => {
   const totalWeight = list.value.reduce((a, b) => a + Number(b.weight), 0)
@@ -33,14 +44,11 @@ const proration = (progress: number, weight: number, trunc: boolean = false) => 
 }
 
 const overallProgress = computed(() => {
-  // const count = list.value.length
-  // const total = list.value.reduce((a, b) => a + Number(b.progress), 0)
-  // const progress = Math.trunc(total / count)
-  // return progress
   const values = list.value.map(o => proration(o.progress, o.weight))
   const total = values.reduce((a, b) => a + b, 0)
   return Math.trunc(total)
 })
+const sorted = computed(() => list.value.sort((a, b) => a.order - b.order))
 </script>
 
 <template>
@@ -54,6 +62,8 @@ const overallProgress = computed(() => {
     <div class="weight">@</div>
     <div class="proration">@</div>
     <div class="delete"><button @click="addList">追加</button></div>
+    <div class="sorting">@</div>
+    <div class="sorting">@</div>
   </div>
   <hr>
   <div class="item">
@@ -63,8 +73,10 @@ const overallProgress = computed(() => {
     <div class="weight">@</div>
     <div class="proration">@</div>
     <div class="delete">@</div>
+    <div class="sorting">@</div>
+    <div class="sorting">@</div>
   </div>
-  <div v-for="item in list" class="item">
+  <div v-for="item in sorted" class="item">
     <div class="text">{{item.text}}</div>
     <div class="progress-bar">
       <RangeInput v-model="item.progress" />
@@ -79,6 +91,12 @@ const overallProgress = computed(() => {
     <div class="delete" @click="deleteItem(item.id)">
       <button>削除</button>
     </div>
+    <div class="sorting">
+      <button v-if="item.order!==1" @click="changeOrder('up', item.order)">👆</button>
+    </div>
+    <div class="sorting">
+      <button v-if="item.order!==list.length" @click="changeOrder('down', item.order)">👇</button>
+    </div>
   </div>
   <hr>
   <div class="item">
@@ -90,6 +108,8 @@ const overallProgress = computed(() => {
     <div class="weight">@</div>
     <div class="proration">{{overallProgress}} %</div>
     <div class="delete">@</div>
+    <div class="sorting">@</div>
+    <div class="sorting">@</div>
   </div>
 </template>
 
@@ -118,12 +138,6 @@ const overallProgress = computed(() => {
     border-bottom: 1px solid black
   }
 
-  .progress {
-    width: 60px;
-    text-align: right;
-    border-bottom: 1px solid black
-  }
-
   .weight {
     width: 60px;
     text-align: right;
@@ -138,6 +152,11 @@ const overallProgress = computed(() => {
 
   .delete {
     width: 50px;
+    text-align: right;
+  }
+
+  .sorting {
+    width: 30px;
     text-align: right;
   }
 }
