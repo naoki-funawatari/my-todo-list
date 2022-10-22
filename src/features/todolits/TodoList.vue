@@ -115,13 +115,4 @@ const sorted = computed(() => list.value.sort((a, b) => a.order - b.order))
     text-align: right;
   }
 }
-
-input[type=range],
-progress {
-  width: 150px;
-}
-
-.noborder {
-  border: none;
-}
 </style>

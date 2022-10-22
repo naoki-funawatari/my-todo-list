@@ -19,9 +19,11 @@ const onInput = (event: Event) => {
 </script>
 
 <template>
-  <input type="range" min="0" max="100" step="5" :value="modelValue" @input="onInput" />
+  <input type="range" min="0" max="100" step="5" class="w-full" :value="modelValue" @input="onInput" />
 </template>
 
 <style lang="scss" scoped>
-
+.w-full {
+  width: 100%
+}
 </style>
