@@ -51,70 +51,72 @@ const sorted = computed(() => list.value.sort((a, b) => a.order - b.order))
 </script>
 
 <template>
-  <TodoListHeader :addList="addList" />
-  <hr>
-  <div class="item">
-    <div class="text">内容</div>
-    <div class="progress-bar">@</div>
-    <div class="progress">@</div>
-    <div class="weight">@</div>
-    <div class="proration">@</div>
-    <div class="delete">@</div>
-    <div class="sorting">@</div>
-    <div class="sorting">@</div>
-  </div>
-  <div v-for="item in sorted" class="item">
-    <div class="text">{{item.text}}</div>
-    <div class="progress-bar">
-      <RangeInput v-model="item.progress" />
+  <div>
+    <TodoListHeader :addList="addList" />
+    <hr>
+    <div class="item">
+      <div class="text">内容</div>
+      <div class="progress-bar">@</div>
+      <div class="progress">@</div>
+      <div class="weight">@</div>
+      <div class="proration">@</div>
+      <div class="delete">@</div>
+      <div class="sorting">@</div>
+      <div class="sorting">@</div>
     </div>
-    <div class="progress">
-      <span>{{item.progress}} %</span>
+    <div v-for="item in sorted" class="item">
+      <div class="text">{{item.text}}</div>
+      <div class="progress-bar">
+        <RangeInput v-model="item.progress" />
+      </div>
+      <div class="progress">
+        <span>{{item.progress}} %</span>
+      </div>
+      <div class="weight">
+        <WeightSelector v-model="item.weight" />
+      </div>
+      <div class="proration">{{proration(item.progress, item.weight, true)}} %</div>
+      <div class="delete" @click="deleteItem(item.id)">
+        <button>削除</button>
+      </div>
+      <div class="sorting">
+        <button v-if="item.order!==1" @click="changeOrder('up', item.order)">👆</button>
+      </div>
+      <div class="sorting">
+        <button v-if="item.order!==list.length" @click="changeOrder('down', item.order)">👇</button>
+      </div>
     </div>
-    <div class="weight">
-      <WeightSelector v-model="item.weight" />
+    <hr>
+    <div class="item">
+      <div class="text">進捗率</div>
+      <div class="progress-bar">
+        <progress max="100" :value="overallProgress"></progress>
+      </div>
+      <div class="progress">@</div>
+      <div class="weight">@</div>
+      <div class="proration">{{overallProgress}} %</div>
+      <div class="delete">@</div>
+      <div class="sorting">@</div>
+      <div class="sorting">@</div>
     </div>
-    <div class="proration">{{proration(item.progress, item.weight, true)}} %</div>
-    <div class="delete" @click="deleteItem(item.id)">
-      <button>削除</button>
+    <hr>
+    <div class="item">
+      <div class="text">@</div>
+      <div class="progress-bar">@</div>
+      <div class="progress">@</div>
+      <div class="weight">@</div>
+      <div class="proration">@</div>
+      <div class="delete">
+        <button @click="registerProgress">保存</button>
+      </div>
+      <div class="sorting">@</div>
+      <div class="sorting">@</div>
     </div>
-    <div class="sorting">
-      <button v-if="item.order!==1" @click="changeOrder('up', item.order)">👆</button>
-    </div>
-    <div class="sorting">
-      <button v-if="item.order!==list.length" @click="changeOrder('down', item.order)">👇</button>
-    </div>
-  </div>
-  <hr>
-  <div class="item">
-    <div class="text">進捗率</div>
-    <div class="progress-bar">
-      <progress max="100" :value="overallProgress"></progress>
-    </div>
-    <div class="progress">@</div>
-    <div class="weight">@</div>
-    <div class="proration">{{overallProgress}} %</div>
-    <div class="delete">@</div>
-    <div class="sorting">@</div>
-    <div class="sorting">@</div>
-  </div>
-  <hr>
-  <div class="item">
-    <div class="text">@</div>
-    <div class="progress-bar">@</div>
-    <div class="progress">@</div>
-    <div class="weight">@</div>
-    <div class="proration">@</div>
-    <div class="delete">
-      <button @click="registerProgress">保存</button>
-    </div>
-    <div class="sorting">@</div>
-    <div class="sorting">@</div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.item ::v-deep {
+:deep(.item) {
   display: flex;
   flex-direction: row;
   column-gap: 10px;
