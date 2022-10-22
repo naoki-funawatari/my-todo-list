@@ -1,20 +1,19 @@
 <script setup lang="ts">
-import { ref, computed } from "vue"
+import { ref, computed, onBeforeMount } from "vue"
 import WeightSelector from "./components/WeightSelector.vue"
 import TextInput from "./components/TextInput.vue"
 import RangeInput from "./components/RangeInput.vue"
 import { WeightTypes } from "./types"
 import type { Todo } from "./types"
+import { todoDefaults } from "./constants"
+
+onBeforeMount(() => {
+  const progress = localStorage.getItem("progress")
+  list.value = progress ? JSON.parse(progress) as Todo[] : todoDefaults
+})
 
 const input = ref<string>("")
-const list = ref<Todo[]>([
-  { id: 1, text: "テスト 1", progress: 60, weight: WeightTypes.Low, order: 1 },
-  { id: 2, text: "テスト 2", progress: 45, weight: WeightTypes.Medium, order: 2 },
-  { id: 3, text: "テスト 3", progress: 0, weight: WeightTypes.High, order: 3 },
-  { id: 4, text: "テスト 4", progress: 90, weight: WeightTypes.Low, order: 4 },
-  { id: 5, text: "テスト 5", progress: 35, weight: WeightTypes.High, order: 5 },
-  { id: 6, text: "テスト 6", progress: 60, weight: WeightTypes.Medium, order: 6 },
-])
+const list = ref<Todo[]>([])
 
 const addList = () => {
   if (input.value === "") {
@@ -37,6 +36,11 @@ const changeOrder = (type: "up" | "down", currentOrder: number) => {
   ordered.forEach((o, i) => o.order = i + 1)
   list.value = ordered
 }
+const registerProgress = () => {
+  const value = JSON.stringify(list.value)
+  localStorage.setItem("progress", value)
+}
+
 const proration = (progress: number, weight: number, trunc: boolean = false) => {
   const totalWeight = list.value.reduce((a, b) => a + Number(b.weight), 0)
   const ratio = weight / totalWeight
@@ -108,6 +112,19 @@ const sorted = computed(() => list.value.sort((a, b) => a.order - b.order))
     <div class="weight">@</div>
     <div class="proration">{{overallProgress}} %</div>
     <div class="delete">@</div>
+    <div class="sorting">@</div>
+    <div class="sorting">@</div>
+  </div>
+  <hr>
+  <div class="item">
+    <div class="text">@</div>
+    <div class="progress-bar">@</div>
+    <div class="progress">@</div>
+    <div class="weight">@</div>
+    <div class="proration">@</div>
+    <div class="delete">
+      <button @click="registerProgress">保存</button>
+    </div>
     <div class="sorting">@</div>
     <div class="sorting">@</div>
   </div>
