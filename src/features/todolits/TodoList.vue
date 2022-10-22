@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, onBeforeMount } from "vue"
-import WeightSelector from "src/components/WeightSelector.vue"
-import RangeInput from "src/components/RangeInput.vue"
 import { WeightTypes } from "src/types"
 import type { Todo } from "src/types"
 import { todoDefaults } from "src/constants"
+import TodoListForm from "src/features/todolits/TodoListForm.vue"
 import TodoListHeader from "src/features/todolits/TodoListHeader.vue"
+import TodoListItem from "src/features/todolits/TodoListItem.vue"
+import TodoListFooter from "src/features/todolits/TodoListFooter.vue"
 
 const list = ref<Todo[]>([])
 
@@ -15,6 +16,9 @@ onBeforeMount(() => {
 })
 
 const addList = (text: string): void => {
+  if (text === "") {
+    return
+  }
   const id = Math.max(...list.value.map(o => o.id)) + 1
   const order = Math.max(...list.value.map(o => o.order)) + 1
   const item: Todo = { id, text, progress: 0, weight: WeightTypes.Low, order }
@@ -52,66 +56,13 @@ const sorted = computed(() => list.value.sort((a, b) => a.order - b.order))
 
 <template>
   <div>
-    <TodoListHeader :addList="addList" />
+    <TodoListForm @addClick="addList" />
     <hr>
-    <div class="item">
-      <div class="text">内容</div>
-      <div class="progress-bar">@</div>
-      <div class="progress">@</div>
-      <div class="weight">@</div>
-      <div class="proration">@</div>
-      <div class="delete">@</div>
-      <div class="sorting">@</div>
-      <div class="sorting">@</div>
-    </div>
-    <div v-for="item in sorted" class="item">
-      <div class="text">{{item.text}}</div>
-      <div class="progress-bar">
-        <RangeInput v-model="item.progress" />
-      </div>
-      <div class="progress">
-        <span>{{item.progress}} %</span>
-      </div>
-      <div class="weight">
-        <WeightSelector v-model="item.weight" />
-      </div>
-      <div class="proration">{{proration(item.progress, item.weight, true)}} %</div>
-      <div class="delete" @click="deleteItem(item.id)">
-        <button>削除</button>
-      </div>
-      <div class="sorting">
-        <button v-if="item.order!==1" @click="changeOrder('up', item.order)">👆</button>
-      </div>
-      <div class="sorting">
-        <button v-if="item.order!==list.length" @click="changeOrder('down', item.order)">👇</button>
-      </div>
-    </div>
+    <TodoListHeader />
+    <TodoListItem v-for="item in sorted" :item="item" :list="sorted" :proration="proration" @deleteClick="deleteItem"
+      @orderClick="changeOrder" />
     <hr>
-    <div class="item">
-      <div class="text">進捗率</div>
-      <div class="progress-bar">
-        <progress max="100" :value="overallProgress"></progress>
-      </div>
-      <div class="progress">@</div>
-      <div class="weight">@</div>
-      <div class="proration">{{overallProgress}} %</div>
-      <div class="delete">@</div>
-      <div class="sorting">@</div>
-      <div class="sorting">@</div>
-    </div>
-    <hr>
-    <div class="item">
-      <div class="text">@</div>
-      <div class="progress-bar">@</div>
-      <div class="progress">@</div>
-      <div class="weight">@</div>
-      <div class="proration">@</div>
-      <div class="delete">
-        <button @click="registerProgress">保存</button>
-      </div>
-      <div class="sorting">@</div>
-      <div class="sorting">@</div>
-    </div>
+    <TodoListFooter :overallProgress="overallProgress" @registerClick="registerProgress" />
   </div>
 </template>
 
