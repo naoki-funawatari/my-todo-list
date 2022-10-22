@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, onBeforeMount } from "vue"
-import WeightSelector from "../../components/WeightSelector.vue"
-import RangeInput from "../../components/RangeInput.vue"
-import { WeightTypes } from "../../types"
-import type { Todo } from "../../types"
-import { todoDefaults } from "../../constants"
-import TodoListHeader from "./TodoListHeader.vue"
+import WeightSelector from "src/components/WeightSelector.vue"
+import RangeInput from "src/components/RangeInput.vue"
+import { WeightTypes } from "src/types"
+import type { Todo } from "src/types"
+import { todoDefaults } from "src/constants"
+import TodoListHeader from "src/features/todolits/TodoListHeader.vue"
 
 const list = ref<Todo[]>([])
 

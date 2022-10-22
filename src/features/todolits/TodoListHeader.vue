@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, PropType } from "vue"
-import TextInput from "../../components/TextInput.vue"
+import TextInput from "src/components/TextInput.vue"
 
 const { addList } = defineProps({
   addList: {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PropType, ref } from "vue"
-import { WeightTypes } from "../types"
-import type { Weight, WeightType } from "../types"
+import { WeightTypes } from "src/types"
+import type { Weight, WeightType } from "src/types"
 
 defineProps({
   modelValue: {
