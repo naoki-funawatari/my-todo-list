@@ -15,7 +15,7 @@ onBeforeMount(() => {
   list.value = progress ? JSON.parse(progress) as Todo[] : todoDefaults
 })
 
-const addList = (text: string): void => {
+const addItem = (text: string): void => {
   if (text === "") {
     return
   }
@@ -25,7 +25,9 @@ const addList = (text: string): void => {
   list.value = [item, ...list.value]
 }
 const deleteItem = (id: number) => {
-  list.value = list.value.filter(o => o.id !== id)
+  const newlist = list.value.filter(o => o.id !== id)
+  newlist.forEach((o, i) => o.order = i + 1)
+  list.value = newlist
 }
 const changeOrder = (type: "up" | "down", currentOrder: number) => {
   let ordered = [...list.value]
@@ -56,7 +58,7 @@ const sorted = computed(() => list.value.sort((a, b) => a.order - b.order))
 
 <template>
   <div>
-    <TodoListForm @addClick="addList" />
+    <TodoListForm @addClick="addItem" />
     <hr>
     <TodoListHeader />
     <TodoListItem v-for="item in sorted" :item="item" :list="sorted" :proration="proration" @deleteClick="deleteItem"
