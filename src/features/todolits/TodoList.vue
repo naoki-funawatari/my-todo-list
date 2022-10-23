@@ -7,52 +7,14 @@ import TodoListForm from "src/features/todolits/TodoListForm.vue"
 import TodoListHeader from "src/features/todolits/TodoListHeader.vue"
 import TodoListItem from "src/features/todolits/TodoListItem.vue"
 import TodoListFooter from "src/features/todolits/TodoListFooter.vue"
-
-const list = ref<Todo[]>([])
+import { useTodoListStore } from 'src/stores'
 
 onBeforeMount(() => {
   const progress = localStorage.getItem("progress")
-  list.value = progress ? JSON.parse(progress) as Todo[] : todoDefaults
+  todoList.list = progress ? JSON.parse(progress) as Todo[] : todoDefaults
 })
 
-const addItem = (text: string): void => {
-  if (text === "") {
-    return
-  }
-  const id = Math.max(...list.value.map(o => o.id)) + 1
-  const order = Math.max(...list.value.map(o => o.order)) + 1
-  const item: Todo = { id, text, progress: 0, weight: WeightTypes.Low, order }
-  list.value = [item, ...list.value]
-}
-const deleteItem = (id: number) => {
-  const newlist = list.value.filter(o => o.id !== id)
-  newlist.forEach((o, i) => o.order = i + 1)
-  list.value = newlist
-}
-const changeOrder = (type: "up" | "down", currentOrder: number) => {
-  let ordered = [...list.value]
-  const index = ordered.findIndex(o => o.order === currentOrder)
-  ordered[index].order += (type === "up" ? -1.5 : 1.5)
-  ordered.sort((a, b) => a.order - b.order)
-  ordered.forEach((o, i) => o.order = i + 1)
-  list.value = ordered
-}
-const registerProgress = () => {
-  const value = JSON.stringify(list.value)
-  localStorage.setItem("progress", value)
-}
-
-const proration = (progress: number, weight: number, trunc: boolean = false) => {
-  const totalWeight = list.value.reduce((a, b) => a + Number(b.weight), 0)
-  const ratio = weight / totalWeight
-  return trunc ? Math.trunc(progress * ratio) : progress * ratio
-}
-
-const overallProgress = computed(() => {
-  const values = list.value.map(o => proration(o.progress, o.weight))
-  const total = values.reduce((a, b) => a + b, 0)
-  return Math.trunc(total)
-})
+const todoList = useTodoListStore()
 
 const draggable = ref("true")
 const orders = reactive({ from: 0, to: 0 })
@@ -80,7 +42,7 @@ const onDragOver = (event: Event) => { }
 const onDrop = (event: Event) => {
   const target = event.currentTarget as HTMLDivElement
   target.classList.remove("over")
-  const item = list.value.find(o => o.order === orders.from)!
+  const item = todoList.list.find(o => o.order === orders.from)!
   if (orders.to > orders.from) {
     // 後ろにずらす
     item.order = orders.to + 0.5
@@ -91,10 +53,10 @@ const onDrop = (event: Event) => {
     // 変更なし
   }
 
-  let ordered = [...list.value]
+  let ordered = [...todoList.list]
   ordered.sort((a, b) => a.order - b.order)
   ordered.forEach((o, i) => o.order = i + 1)
-  list.value = ordered
+  todoList.list = ordered
 }
 const onDragLeave = (event: DragEvent) => {
   const target = event.currentTarget as HTMLDivElement
@@ -103,20 +65,19 @@ const onDragLeave = (event: DragEvent) => {
 const onMouseEnter = (event: Event) => {
   draggable.value = event.target instanceof HTMLDivElement ? "true" : "false"
 }
-const sorted = computed(() => list.value.sort((a, b) => a.order - b.order))
 </script>
 
 <template>
   <div>
-    <TodoListForm @addClick="addItem" />
+    <TodoListForm />
     <hr>
     <TodoListHeader />
-    <TodoListItem v-for="item in sorted" :item="item" :list="sorted" :draggable="draggable" :proration="proration"
-      @deleteClick="deleteItem" @orderClick="changeOrder" @dragstart="onDragStart" @dragend="onDragEnd"
-      @dragenter="onDragEnter" @dragover.prevent="onDragOver" @dragleave="onDragLeave" @drop.prevent="onDrop"
-      @mouseenter.capture="onMouseEnter" />
+    <TodoListItem v-for="item in todoList.sorted" :item="item" :list="todoList.list" :draggable="draggable"
+      :proration="todoList.proration" @deleteClick="todoList.deleteItem" @orderClick="todoList.changeOrder"
+      @dragstart="onDragStart" @dragend="onDragEnd" @dragenter="onDragEnter" @dragover.prevent="onDragOver"
+      @dragleave="onDragLeave" @drop.prevent="onDrop" @mouseenter.capture="onMouseEnter" />
     <hr>
-    <TodoListFooter :overallProgress="overallProgress" @registerClick="registerProgress" />
+    <TodoListFooter :overallProgress="todoList.overallProgress" @registerClick="todoList.registerProgress" />
   </div>
 </template>
 

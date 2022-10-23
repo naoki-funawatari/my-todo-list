@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import TextInput from "src/components/TextInput.vue"
+import { useTodoListStore } from 'src/stores'
 
+const todoList = useTodoListStore()
 const input = ref<string>("")
 
-const emits = defineEmits<{ (event: 'addClick', text: string): void }>()
 const onAddClick = () => {
-  emits("addClick", input.value)
+  todoList.addItem(input.value)
   input.value = ""
 }
 </script>
