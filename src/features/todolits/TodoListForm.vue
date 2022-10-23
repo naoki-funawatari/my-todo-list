@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
-import TextInput from "src/components/TextInput.vue"
 import { useTodoListStore } from 'src/stores'
+import TextInput from "src/components/TextInput.vue"
 
 const todoList = useTodoListStore()
 const input = ref<string>("")
