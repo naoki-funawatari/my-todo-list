@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onBeforeMount } from "vue"
+import { ref, reactive, computed, onBeforeMount } from "vue"
 import { WeightTypes } from "src/types"
 import type { Todo } from "src/types"
 import { todoDefaults } from "src/constants"
@@ -53,6 +53,56 @@ const overallProgress = computed(() => {
   const total = values.reduce((a, b) => a + b, 0)
   return Math.trunc(total)
 })
+
+const draggable = ref("true")
+const orders = reactive({ from: 0, to: 0 })
+const onDragStart = (event: DragEvent) => {
+  const target = event.currentTarget as HTMLDivElement
+  target.classList.add("dragging")
+  const order = target.dataset.order
+  if (order) {
+    orders.from = Number(order)
+  }
+}
+const onDragEnd = (event: DragEvent) => {
+  const target = event.currentTarget as HTMLDivElement
+  target.classList.remove("dragging")
+}
+const onDragEnter = (event: DragEvent) => {
+  const target = event.currentTarget as HTMLDivElement
+  target.classList.add("over")
+  const order = target.dataset.order
+  if (order) {
+    orders.to = Number(order)
+  }
+}
+const onDragOver = (event: Event) => { }
+const onDrop = (event: Event) => {
+  const target = event.currentTarget as HTMLDivElement
+  target.classList.remove("over")
+  const item = list.value.find(o => o.order === orders.from)!
+  if (orders.to > orders.from) {
+    // 後ろにずらす
+    item.order = orders.to + 0.5
+  } else if (orders.from > orders.to) {
+    // 前にずらす
+    item.order = orders.to - 0.5
+  } else {
+    // 変更なし
+  }
+
+  let ordered = [...list.value]
+  ordered.sort((a, b) => a.order - b.order)
+  ordered.forEach((o, i) => o.order = i + 1)
+  list.value = ordered
+}
+const onDragLeave = (event: DragEvent) => {
+  const target = event.currentTarget as HTMLDivElement
+  target.classList.remove("over")
+}
+const onMouseEnter = (event: Event) => {
+  draggable.value = event.target instanceof HTMLDivElement ? "true" : "false"
+}
 const sorted = computed(() => list.value.sort((a, b) => a.order - b.order))
 </script>
 
@@ -61,8 +111,10 @@ const sorted = computed(() => list.value.sort((a, b) => a.order - b.order))
     <TodoListForm @addClick="addItem" />
     <hr>
     <TodoListHeader />
-    <TodoListItem v-for="item in sorted" :item="item" :list="sorted" :proration="proration" @deleteClick="deleteItem"
-      @orderClick="changeOrder" />
+    <TodoListItem v-for="item in sorted" :item="item" :list="sorted" :draggable="draggable" :proration="proration"
+      @deleteClick="deleteItem" @orderClick="changeOrder" @dragstart="onDragStart" @dragend="onDragEnd"
+      @dragenter="onDragEnter" @dragover.prevent="onDragOver" @dragleave="onDragLeave" @drop.prevent="onDrop"
+      @mouseenter.capture="onMouseEnter" />
     <hr>
     <TodoListFooter :overallProgress="overallProgress" @registerClick="registerProgress" />
   </div>
@@ -75,6 +127,18 @@ const sorted = computed(() => list.value.sort((a, b) => a.order - b.order))
   column-gap: 10px;
   width: 800px;
   margin-bottom: 5px;
+
+  &[draggable="true"] {
+    cursor: move;
+  }
+
+  &.dragging {
+    color: red
+  }
+
+  &.over {
+    background-color: rgba(255, 255, 0, 0.3);
+  }
 
   .text {
     flex-grow: 1;

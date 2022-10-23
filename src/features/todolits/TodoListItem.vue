@@ -32,8 +32,10 @@ const onOrderClick = (type: "up" | "down", currentOrder: number) => {
 </script>
 
 <template>
-  <div class="item">
-    <div class="text">{{item.text}}</div>
+  <div :id="item.id.toString()" :data-order="item.order" class="item">
+    <div class="text">
+      <span>{{item.text}}</span>
+    </div>
     <div class="progress-bar">
       <RangeInput v-model="item.progress" />
     </div>
