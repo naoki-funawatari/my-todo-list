@@ -18,11 +18,11 @@ const onInput = (event: Event) => {
 </script>
 
 <template>
-  <input type="text" :value="modelValue" @input="onInput" />
+  <input type="text" class="w-full" :value="modelValue" @input="onInput" />
 </template>
 
 <style lang="scss" scoped>
-input[type=text] {
+.w-full {
   width: 100%
 }
 </style>

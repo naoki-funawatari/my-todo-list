@@ -59,19 +59,19 @@ onBeforeMount(() => {
   }
 
   .progress {
-    width: 60px;
+    width: 52px;
     text-align: right;
     border-bottom: 1px solid black
   }
 
   .weight {
-    width: 60px;
+    width: 38px;
     text-align: right;
     border-bottom: 1px solid black
   }
 
   .proration {
-    width: 60px;
+    width: 52px;
     text-align: right;
     border-bottom: 1px solid black
   }

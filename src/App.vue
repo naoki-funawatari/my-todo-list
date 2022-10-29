@@ -8,5 +8,7 @@ import TodoList from "src/features/todolist/TodoList.vue"
 </template>
 
 <style lang="scss" scoped>
-
+:deep(*) {
+  box-sizing: border-box;
+}
 </style>
