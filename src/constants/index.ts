@@ -1,4 +1,10 @@
-import { Todo, WeightTypes } from "../types"
+import type { Todo } from "src/types"
+
+export const WeightTypes = {
+  Low: 1,
+  Medium: 3,
+  High: 5,
+} as const
 
 export const todoDefaults: Todo[] = [
   {

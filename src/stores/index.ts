@@ -1,7 +1,8 @@
 // https://pinia.vuejs.org/core-concepts/#setup-stores
 import { computed, ref } from "vue"
 import { defineStore } from "pinia"
-import { Todo, WeightTypes } from "src/types"
+import { Todo } from "src/types"
+import { WeightTypes } from "src/constants"
 
 export const useTodoListStore = defineStore("todoList", () => {
   const list = ref<Todo[]>([])
