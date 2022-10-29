@@ -8,8 +8,6 @@
     <div class="weight">@</div>
     <div class="proration">@</div>
     <div class="delete">@</div>
-    <div class="sorting">@</div>
-    <div class="sorting">@</div>
   </div>
 </template>
 

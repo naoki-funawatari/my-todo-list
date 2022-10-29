@@ -17,8 +17,6 @@ const onRegisterClick = () => todoList.registerProgress()
     <div class="delete">
       <button @click="onRegisterClick">保存</button>
     </div>
-    <div class="sorting">@</div>
-    <div class="sorting">@</div>
   </div>
 </template>
 

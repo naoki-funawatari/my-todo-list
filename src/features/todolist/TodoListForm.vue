@@ -22,8 +22,6 @@ const onAddClick = () => {
     <div class="weight">@</div>
     <div class="proration">@</div>
     <div class="delete"><button @click="onAddClick">追加</button></div>
-    <div class="sorting">@</div>
-    <div class="sorting">@</div>
   </div>
 </template>
 

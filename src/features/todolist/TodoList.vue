@@ -80,10 +80,5 @@ onBeforeMount(() => {
     width: 50px;
     text-align: right;
   }
-
-  .sorting {
-    width: 30px;
-    text-align: right;
-  }
 }
 </style>

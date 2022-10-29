@@ -17,10 +17,7 @@ defineProps({
 
 const onDeleteClick = (id: number) => {
   todoList.deleteItem(id)
-}
-const onOrderClick = (type: "up" | "down", currentOrder: number) => {
-  todoList.changeOrder(type, currentOrder)
-}
+} 
 </script>
 
 <template>
@@ -38,12 +35,6 @@ const onOrderClick = (type: "up" | "down", currentOrder: number) => {
     <div class="proration">{{todoList.proration(item.progress, item.weight, true)}} %</div>
     <div class="delete" @click="onDeleteClick(item.id)">
       <button>削除</button>
-    </div>
-    <div class="sorting">
-      <button v-if="item.order!==1" @click="onOrderClick('up', item.order)">👆</button>
-    </div>
-    <div class="sorting">
-      <button v-if="item.order!==todoList.list.length" @click="onOrderClick('down', item.order)">👇</button>
     </div>
   </div>
 </template>
