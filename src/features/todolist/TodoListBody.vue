@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue"
 import { useTodoListStore } from 'src/stores'
-import TodoListItem from "src/features/todolits/TodoListItem.vue"
+import TodoListItem from "src/features/todolist/TodoListItem.vue"
 
 const todoList = useTodoListStore()
 const draggable = ref("true")

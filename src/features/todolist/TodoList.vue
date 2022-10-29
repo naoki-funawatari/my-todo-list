@@ -3,10 +3,10 @@ import { onBeforeMount } from "vue"
 import type { Todo } from "src/types"
 import { todoDefaults } from "src/constants"
 import { useTodoListStore } from 'src/stores'
-import TodoListForm from "src/features/todolits/TodoListForm.vue"
-import TodoListHeader from "src/features/todolits/TodoListHeader.vue"
-import TodoListBody from "src/features/todolits/TodoListBody.vue"
-import TodoListFooter from "src/features/todolits/TodoListFooter.vue"
+import TodoListForm from "src/features/todolist/TodoListForm.vue"
+import TodoListHeader from "src/features/todolist/TodoListHeader.vue"
+import TodoListBody from "src/features/todolist/TodoListBody.vue"
+import TodoListFooter from "src/features/todolist/TodoListFooter.vue"
 
 const todoList = useTodoListStore()
 
