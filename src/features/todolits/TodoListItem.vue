@@ -31,9 +31,7 @@ const onOrderClick = (type: "up" | "down", currentOrder: number) => {
     <div class="progress-bar">
       <RangeInput v-model="item.progress" />
     </div>
-    <div class="progress">
-      <span>{{item.progress}} %</span>
-    </div>
+    <div class="progress">{{item.progress}} %</div>
     <div class="weight">
       <WeightSelector v-model="item.weight" />
     </div>

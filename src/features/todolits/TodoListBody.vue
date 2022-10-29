@@ -50,7 +50,7 @@ const onDragLeave = (event: DragEvent) => {
   const target = event.currentTarget as HTMLDivElement
   target.classList.remove("over")
 }
-const onMouseEnter = (event: Event) => {
+const onMouseMove = (event: Event) => {
   draggable.value = event.target instanceof HTMLDivElement ? "true" : "false"
 }
 </script>
@@ -58,7 +58,7 @@ const onMouseEnter = (event: Event) => {
 <template>
   <TodoListItem v-for="item in todoList.sorted" :item="item" :draggable="draggable" @dragstart="onDragStart"
     @dragend="onDragEnd" @dragenter="onDragEnter" @dragover.prevent="onDragOver" @dragleave="onDragLeave"
-    @drop.prevent="onDrop" @mouseenter.capture="onMouseEnter" />
+    @drop.prevent="onDrop" @mousemove.capture="onMouseMove" />
 </template>
 
 <style lang="scss" scoped>
