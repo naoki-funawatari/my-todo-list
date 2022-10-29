@@ -2,6 +2,7 @@
 import { PropType } from 'vue';
 import { Todo } from 'src/types';
 import { useTodoListStore } from 'src/stores'
+import TextInput from "src/components/TextInput.vue"
 import WeightSelector from "src/components/WeightSelector.vue"
 import RangeInput from "src/components/RangeInput.vue"
 
@@ -25,7 +26,7 @@ const onOrderClick = (type: "up" | "down", currentOrder: number) => {
 <template>
   <div :id="item.id.toString()" :data-order="item.order" class="item">
     <div class="text">
-      <span>{{item.text}}</span>
+      <TextInput type="text" v-model="item.text" />
     </div>
     <div class="progress-bar">
       <RangeInput v-model="item.progress" />

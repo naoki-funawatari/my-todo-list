@@ -6,11 +6,6 @@ export interface Todo {
   order: number
 }
 
-export interface Weight {
-  value: number
-  text: string
-}
-
 export const WeightTypes = {
   Low: 1,
   Medium: 3,
